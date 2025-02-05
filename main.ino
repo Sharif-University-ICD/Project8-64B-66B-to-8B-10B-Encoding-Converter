@@ -18,6 +18,7 @@ void setup() {
     pinMode(pin, OUTPUT);
   }
   Serial.begin(9600);
+  randomSeed(analogRead(0));
 }
 
 void print10BitBinary(uint16_t value) {
@@ -59,7 +60,7 @@ uint16_t reverseLowest10Bits(uint16_t value) {
 }
 
 void injectError(uint16_t &data, bool &isTransient) {
-  int bitPosition = random(0, 15);
+  int bitPosition = random(0, 9);
   data ^= (1 << bitPosition);   
   isTransient = random(0, 2);    
   // Modified this part to play with the transient rate.
@@ -67,7 +68,7 @@ void injectError(uint16_t &data, bool &isTransient) {
 }
 
 bool isFaulty(uint16_t value) {
-    uint16_t data = extractDataFromHamming(value) & 3FF;
+    uint16_t data = extractDataFromHamming(value) & 0x3FF;
     int consecutiveZeros = 0, maxConsecutiveZeros = 0;
     int consecutiveOnes = 0, maxConsecutiveOnes = 0;
     int onesCount = 0, zerosCount = 0;
@@ -288,15 +289,15 @@ for (int i = 0; i < 8; i++) {
 
       guessedPermenant[i] = true;
       Serial.print("Permanent fault detected at index ");
-      Serial.print(i);
+      Serial.println(i);
       // Serial.print(". Original value: ");
       // print10BitBinary(extractDataFromHamming(encodedHamming[i]));
       Serial.print("Corrected value: ");
       print10BitBinary(correctedRawData);
     } else {
-      // Error was transient and fixed earlier, or a false alarm
+      // Error was transient and fixed earlier
       guessedTransient[i] = true;
-      Serial.print("False alarm or transient error at index ");
+      Serial.print("Transient error at index ");
       Serial.println(i);
     }
   }
@@ -324,7 +325,7 @@ for (int i = 0; i < 8; i++) {
   if (guessedTransient[i] == true) {
     digitalWrite(2, HIGH);
   }
-  delay(60000);
+  delay(30000);
 }
 
   delay(300000);
