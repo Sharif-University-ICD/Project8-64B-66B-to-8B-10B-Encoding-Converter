@@ -20,4 +20,4 @@ This project implements a real-time encoding converter using an Arduino board to
 ---
 
 ## **Demonstration Video Link**
-https://aparat.com/v/xkaw65c
+[![Watch the presentation on Aparat](https://img.shields.io/badge/Watch%20on-Aparat-FF0000?style=for-the-badge&logo=aparat&logoColor=white)](https://aparat.com/v/xkaw65c)
